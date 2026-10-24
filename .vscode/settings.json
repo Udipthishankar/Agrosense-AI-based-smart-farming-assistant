@@ -1,0 +1,4 @@
+{
+    "python.terminal.useEnvFile": true,
+    "git.decorations.enabled": false
+}

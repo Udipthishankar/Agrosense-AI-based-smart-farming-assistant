@@ -1,0 +1,6 @@
+{
+  "name": "AgroSense - Farming Tools & Advisory",
+  "description": "Farming information application with crop suitability matching, weather information, educational plant-condition references, farmer guidance, and activity records.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["CROP_SUITABILITY_MATCHING", "WEATHER_INFORMATION", "ACTIVITY_RECORDS", "KEYWORD_BASED_GUIDANCE"]
+}

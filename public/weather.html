@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSense - Weather & Advisory</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+        .weather-card {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid #2e7d32;
+        }
+        .weather-card h4 {
+            color: #1b5e20;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .weather-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .advisory-box {
+            background: #fff8e1;
+            border-left: 6px solid #ffb300;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🌿 AgroSense</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="crop.html">Crop Recommendations</a>
+            <a href="disease.html">Disease References</a>
+            <a href="weather.html" class="active">Weather</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 class="page-title">Agricultural Weather Intelligence</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #666;">
+            Real-time localized climate data to assist with irrigation and field operations.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label>Enter Location / Region:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="locationInput" placeholder="e.g., Bengaluru" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                <button type="button" class="btn" style="width: auto; padding: 10px 20px;" onclick="fetchWeather()">Check Weather</button>
+            </div>
+        </div>
+
+        <div class="weather-grid">
+            <div class="weather-card">
+                <h4>Temperature</h4>
+                <p id="tempVal">28°C</p>
+            </div>
+            <div class="weather-card">
+                <h4>Humidity</h4>
+                <p id="humVal">65%</p>
+            </div>
+            <div class="weather-card">
+                <h4>Rainfall Chance</h4>
+                <p id="rainVal">12%</p>
+            </div>
+        </div>
+
+        <div class="advisory-box">
+            <h3 style="color: #ff8f00; margin-bottom: 5px;">🚜 Farming Advisory:</h3>
+            <p id="advisoryText">Weather conditions are optimal for field tilling and fertilizer application. Low rain probability expected over the next 48 hours.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AgroSense. Empowering modern agriculture.</p>
+    </footer>
+
+    <script>
+        const API_BASE_URL = '/api';
+
+        function fetchWeather() {
+            const location = document.getElementById('locationInput').value.trim() || 'Bengaluru';
+            
+            fetch(`${API_BASE_URL}/weather/${encodeURIComponent(location)}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('tempVal').textContent = data.temperature + '°C';
+                    document.getElementById('humVal').textContent = data.humidity + '%';
+                    document.getElementById('rainVal').textContent = data.rainfall_chance + '%';
+                    document.getElementById('advisoryText').textContent = data.advisory;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('advisoryText').textContent = 
+                        'Weather data currently unavailable for this location. Please try another city.';
+                });
+        }
+
+        document.getElementById('locationInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                fetchWeather();
+            }
+        });
+
+        // Load default weather on page load
+        window.addEventListener('load', () => {
+            fetchWeather();
+        });
+    </script>
+</body>
+</html>
